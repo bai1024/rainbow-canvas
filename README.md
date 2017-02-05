@@ -27,9 +27,9 @@ const ctx = canvas.getContext('2d');//获取该canvas的2D绘图环境对象
 在线体验不同的hsl产生的不同效果：http://mothereffinghsl.com/
 
 ##### 二、HSL的含义。
-H：Hue(色调)。0(或360)表示红色，120表示绿色，240表示蓝色，也可取其他数值来指定颜色。取值为：0 - 360；
-S：Saturation(饱和度)。取值为：0.0% - 100.0%；
-L：Lightness(亮度)。取值为：0.0% - 100.0%；
+- H：Hue(色调)。0(或360)表示红色，120表示绿色，240表示蓝色，也可取其他数值来指定颜色。取值为：0 - 360；
+- S：Saturation(饱和度)。取值为：0.0% - 100.0%；
+- L：Lightness(亮度)。取值为：0.0% - 100.0%；
 这之中 H 值从 0 到 360 的变化代表了色相的角度的值域变化，利用这一点就可以实现绘制时线条颜色的渐变了，只需要在它的值超过 360 时恢复到 0 重新累加即可。
 ```javascript
 let hue = 0;
@@ -71,6 +71,7 @@ lastY = e.offsetY;
 
 ##### 二、线条衔接问题
 在上面一点中，已经提到了鼠标拖动事触发的函数，但是在运行中却会出现下图中的情况。
+(每次另起起点时，起点自动变成了上次绘制的线条的终点)
 
 ![](http://ok7n02kz6.bkt.clouddn.com/FjnXtXNdkrTvnqa9UBmjMU34LeLk.gif)
 
@@ -81,3 +82,17 @@ lastY = e.offsetY;
 所以只要在`mouseup`事件中更新一下`lastX`的值就可以了。现在再来看一下打印结果：
 
 ![](http://ok7n02kz6.bkt.clouddn.com/FgAdrWSKVrrLCGTe6t9yr6HZ5Zy8.png)
+
+##### 三、控制线条的粗细以及颜色变化
+前面说到HSL色彩模式时已经提到了如何实现色彩的变化，这里就不做赘述了，主要记录一下线条的粗细是如何实现的。
+```javascript
+   let direction = true;//标记一个变量
+   if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+    direction = !direction;
+  }//控制线条变化的粗细值，超出范围时取反
+  if(direction) {
+    ctx.lineWidth++;
+  } else {
+    ctx.lineWidth--;
+  }
+```
