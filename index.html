@@ -25,11 +25,11 @@
   function draw(e) {
     if(!isDrawing) return;
     ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-    ctx.beginPath();
-    ctx.moveTo(lastX,lastY);
+    ctx.beginPath();//新建一条路径
+    ctx.moveTo(lastX,lastY);//起始位置
        console.log("lastX:"+lastX)
-    ctx.lineTo(e.offsetX,e.offsetY);
-    ctx.stroke();
+    ctx.lineTo(e.offsetX,e.offsetY);//直线结束点
+    ctx.stroke();//通过线条绘制图形轮廓
     lastX = e.offsetX;
     lastY = e.offsetY;
     console.log('e.offsetX:' + e.offsetX)
@@ -41,7 +41,6 @@
     if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
     direction = !direction;
   }
-
   if(direction) {
     ctx.lineWidth++;
   } else {
@@ -64,6 +63,7 @@
 <style>
   html, body {
     margin:0;
+    overflow: hidden;
   }
 </style>
 
