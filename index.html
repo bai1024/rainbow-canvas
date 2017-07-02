@@ -2,70 +2,90 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>HTML5 Canvas</title>
+  <title>Rainbow Canvas</title>
+  <style>
+    html, body {
+      margin:0;
+      overflow: hidden;
+    }
+    .tip {
+      position: fixed;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+      font-family: "PingFang SC";
+    }
+  </style>
 </head>
 <body>
-<canvas id="draw" width="800" height="800"></canvas>
-<script>
-  const canvas = document.querySelector('#draw');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  ctx.strokeStyle = '#BADA55';
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
-  ctx.lineWidth = 50;
 
-  let isDrawing = false;
-  let lastX = 0;
-  let lastY = 0;
-  let hue = 0;
-  let direction = true;
+<p class="tip">按下`空格`键清除画布</p>
+
+<canvas id="draw" width="800" height="800"></canvas>
+
+<script>
+  var canvas = document.querySelector('#draw')
+  var ctx = canvas.getContext('2d')
+  var width = window.innerWidth
+  var height = window.innerHeight
+  canvas.width = width
+  canvas.height = height
+  ctx.strokeStyle = '#BADA55'
+  ctx.lineJoin = 'round'
+  ctx.lineCap = 'round'
+  ctx.lineWidth = 50
+
+  var isDrawing = false
+  var lastX = 0
+  var lastY = 0
+  var hue = 0
+  var direction = true
 
   function draw(e) {
-    if(!isDrawing) return;
-    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-    ctx.beginPath();//新建一条路径
-    ctx.moveTo(lastX,lastY);//起始位置
-       console.log("lastX:"+lastX)
-    ctx.lineTo(e.offsetX,e.offsetY);//直线结束点
-    ctx.stroke();//通过线条绘制图形轮廓
-    lastX = e.offsetX;
-    lastY = e.offsetY;
-    console.log('e.offsetX:' + e.offsetX)
-
+    if(!isDrawing) return
+    ctx.strokeStyle = "hsl(" + hue + ", 100%, 50%)"
+    ctx.beginPath()
+    ctx.moveTo(lastX, lastY)
+    ctx.lineTo(e.offsetX,e.offsetY)
+    ctx.stroke()
+    lastX = e.offsetX
+    lastY = e.offsetY
     hue++
     if(hue >=360){
       hue = 0
     }
     if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
-    direction = !direction;
-  }
-  if(direction) {
-    ctx.lineWidth++;
-  } else {
-    ctx.lineWidth--;
-  }
+      direction = !direction;
+    }
+    if(direction) {
+      ctx.lineWidth++
+    } else {
+      ctx.lineWidth--
+    }
   }
 
-  canvas.addEventListener('mousemove',draw);
-  canvas.addEventListener('mousedown',(e) => {
-    isDrawing = true;
-    // lastX = e.offsetX;
-    // lastY = e.offsetY;
-    [lastX,lastY] = [e.offsetX, e.offsetY]
-  });
-  canvas.addEventListener('mouseup',() => isDrawing = false);
-  canvas.addEventListener('mouseout',() => isDrawing = false);
+  canvas.addEventListener('mousemove', draw)
 
-</script> 
+  canvas.addEventListener('mousedown', function(e) {
+    isDrawing = true
+    lastX = e.offsetX
+    lastY = e.offsetY
+  })
 
-<style>
-  html, body {
-    margin:0;
-    overflow: hidden;
-  }
-</style>
+  canvas.addEventListener('mouseup', function() {
+    isDrawing = false
+  })
 
+  canvas.addEventListener('mouseout', function() {
+    isDrawing = false
+  })
+
+  document.addEventListener('keydown', function(e) {
+    if(e.keyCode === 32) {
+      ctx.clearRect(0, 0, width, height)
+    }
+  })
+</script>
 </body>
 </html>
